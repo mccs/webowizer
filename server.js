@@ -5,12 +5,16 @@ var app = express();
 
 app.configure(function(){
   app.use(express.bodyParser());
-  app.use(express.static(__dirname + '/wemory-bank'));
+  app.use(express.static(__dirname + '/webory-bank'));
   app.use(app.router);
 });
 
 app.get('/', function (req, res) {
   res.send('Welcome to the ' + config.name);
+});
+
+app.post('/webory-bank', function (req, res) {
+  res.send('webowizing!');
 });
 
 app.listen(config.server.port);
