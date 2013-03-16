@@ -2,6 +2,7 @@ var config = require('./config');
 var express = require('express');
 var Memowizer = require('./lib/memowizer');
 var Validator = require('./lib/validator');
+var Wemember = require('./lib/wemember');
 
 var app = express();
 
@@ -15,6 +16,21 @@ app.get('/', function (req, res) {
   res.send('Welcome to the ' + config.name);
 });
 
+app.get('/info', function (req, res) {
+  var path = req.param('path');
+  Wemember.create(path, config.dir).getContents().then(function (files) {
+    res.send({
+      contents: files,
+      path: path
+    });
+  }, function (err) {
+    console.log(
+      'error: {path: "' + path + '"} - ' + err.toString()
+    );
+    res.send(404);
+  });
+});
+
 app.post('/webowize', function (req, res) {
   var props = {
     name: req.param('name'),
@@ -22,24 +38,27 @@ app.post('/webowize', function (req, res) {
   };
 
   if (!Validator.create(props).isValid()) {
-    console.log('error: {name: "' + props.name + '", url: "'+ props.url +'"} - invalid');;
+    console.log(
+      'error: {name: "' + props.name + '", url: "' +props.url +
+      '"} - invalid'
+    );
     res.send({
-      success: false,
-      msg: 'invalid parameters'
+      err: 'invalid parameters'
     }, 400);
   } else {
-    Memowizer.create(req.param('name'), req.param('url'), config.dir)
+    Memowizer.create(props.name, props.url, config.dir)
       .save()
       .then(function () {
         res.send({
-          success: true,
-          msg: 'webowized!'
+          path: props.name
         }, 201);
       }, function (err) {
-        console.log('error: {name: "' + props.name + '", url: "'+ props.url +'"} - ' + err);
+        console.log(
+          'error: {name: "' + props.name + '", url: "' + props.url +
+          '"} - ' + err
+        );
         res.send({
-          success: false,
-          msg: err
+          err: err
         }, 500);
       });
   }
