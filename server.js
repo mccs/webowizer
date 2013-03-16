@@ -13,7 +13,7 @@ app.get('/', function (req, res) {
   res.send('Welcome to the ' + config.name);
 });
 
-app.post('/webory-bank', function (req, res) {
+app.post('/weborize', function (req, res) {
   res.send('webowizing!');
 });
 
