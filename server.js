@@ -16,7 +16,7 @@ app.get('/', function (req, res) {
   res.send('Welcome to the ' + config.name);
 });
 
-app.del('/delete', function (req, res) {
+app.del('/rm', function (req, res) {
   var path = req.param('path').split('/');
   Wemember.create(path.slice(0, -1).join('/'), config.dir)
     .deleteFile(path.slice(-1)).then(function () {
@@ -29,7 +29,7 @@ app.del('/delete', function (req, res) {
     });
 });
 
-app.get('/info', function (req, res) {
+app.get('/ls', function (req, res) {
   var path = req.param('path');
   Wemember.create(path, config.dir).getContents().then(function (files) {
     res.send({
