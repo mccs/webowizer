@@ -1,6 +1,5 @@
 var config = require('./config');
 var express = require('express');
-var Fetcher = require('./lib/fetcher');
 var Memowizer = require('./lib/memowizer');
 
 var app = express();
@@ -16,18 +15,20 @@ app.get('/', function (req, res) {
 });
 
 app.post('/webowize', function (req, res) {
-  new Fetcher(req.param('url')).fetch().then(function (data) {
-    new Memowizer(req.param('name'))
-      .save(data)
-      .then(function () {
-        res.send('success');
-      }, function (err) {
-        res.send('fail... ' + err);
+  Memowizer.create(req.param('name'), req.param('url'))
+    .save()
+    .then(function () {
+      res.send({
+        success: true,
+        msg: 'success'
       });
-  }, function (err) {
-      res.send('fail... ' + err);
-  });
+    }, function (err) {
+      res.send({
+        success: false,
+        msg: err
+      });
+    });
 });
 
 app.listen(config.server.port);
-  console.log(config.name + ' is listening on port ' + config.server.port);
+console.log(config.name + ' is listening on port ' + config.server.port);
