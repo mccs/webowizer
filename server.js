@@ -19,7 +19,7 @@ app.get('/', function (req, res) {
 app.del('/rm', function (req, res) {
   var path = req.param('path').split('/');
   Wemember.create(path.slice(0, -1).join('/'), config.dir)
-    .deleteFile(path.slice(-1)).then(function () {
+    .rm(path.slice(-1)).then(function () {
       res.send(410);
     }, function (err) {
       console.log(
@@ -27,6 +27,25 @@ app.del('/rm', function (req, res) {
       );
       res.send(404);
     });
+});
+
+app.del('/rmdir', function (req, res) {
+  var path = req.param('path');
+  Wemember.create(path, config.dir)
+    .rmdir().then(function () {
+      res.send(410);
+    }, function (err) {
+      console.log(
+        'error: {path: "' + path + '"} - ' + err.toString()
+      );
+      res.send(409);
+    });
+});
+
+app.del('/rmdir', function (req, res) {
+
+
+
 });
 
 app.get('/ls', function (req, res) {
