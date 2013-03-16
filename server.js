@@ -16,6 +16,19 @@ app.get('/', function (req, res) {
   res.send('Welcome to the ' + config.name);
 });
 
+app.del('/delete', function (req, res) {
+  var path = req.param('path').split('/');
+  Wemember.create(path.slice(0, -1).join('/'), config.dir)
+    .deleteFile(path.slice(-1)).then(function () {
+      res.send(410);
+    }, function (err) {
+      console.log(
+        'error: {path: "' + path.join('/') + '"} - ' + err.toString()
+      );
+      res.send(404);
+    });
+});
+
 app.get('/info', function (req, res) {
   var path = req.param('path');
   Wemember.create(path, config.dir).getContents().then(function (files) {
