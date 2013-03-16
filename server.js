@@ -10,8 +10,8 @@ app.configure(function(){
 });
 
 app.get('/', function (req, res) {
-  res.send('Hello, there!');
+  res.send('Welcome to the ' + config.name);
 });
 
 app.listen(config.server.port);
-console.log('Webowizer is listening on port ' + config.server.port);
+console.log(config.name + ' is listening on port ' + config.server.port);

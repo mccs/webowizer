@@ -1,4 +1,5 @@
 {
+  "name": "MCCS Webowizer",
   "server": {
     "port": 3000
   }
