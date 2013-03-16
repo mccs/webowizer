@@ -4,6 +4,7 @@
   "author": "Colby Rabideau <crabideau5691@gmail.com>",
   "dependencies": {
     "express": "3.x",
+    "mkdirp": "0.3.x",
     "underscore": "1.4.x"
   }
 }
