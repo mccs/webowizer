@@ -7,7 +7,7 @@ var app = express();
 
 app.configure(function(){
   app.use(express.bodyParser());
-  app.use(express.static(__dirname + '/webowy-bank'));
+  app.use(express.static(__dirname + '/' + config.dir));
   app.use(app.router);
 });
 
@@ -28,7 +28,7 @@ app.post('/webowize', function (req, res) {
       msg: 'invalid parameters'
     }, 400);
   } else {
-    Memowizer.create(req.param('name'), req.param('url'))
+    Memowizer.create(req.param('name'), req.param('url'), config.dir)
       .save()
       .then(function () {
         res.send({

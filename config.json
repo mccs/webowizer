@@ -1,5 +1,6 @@
 {
   "name": "MCCS Webowizer",
+  "dir": "webowy-bank",
   "server": {
     "port": 3000
   }
