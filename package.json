@@ -1,0 +1,8 @@
+{
+  "name": "webowizer",
+  "description": "Memorize & categorize things on the internetz",
+  "author": "Colby Rabideau <crabideau5691@gmail.com>",
+  "dependencies": {
+    "express": "3.x"
+  }
+}
