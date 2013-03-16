@@ -1,8 +1,7 @@
 var config = require('./config');
 var express = require('express');
-var fs = require('fs');
-var http = require('http');
-var mkdirp = require('mkdirp');
+var Fetcher = require('./lib/fetcher');
+var Memowizer = require('./lib/memowizer');
 
 var app = express();
 
@@ -17,25 +16,18 @@ app.get('/', function (req, res) {
 });
 
 app.post('/webowize', function (req, res) {
-  var name = req.param('name').split('/');
-  var file;
-
-  mkdirp('webowy-bank/' + name.slice(0, -1).join('/'), function (err) {
-    file = fs.createWriteStream('webowy-bank/' + name.join('/'));
-    if (err) {
-      res.send('shit! ' + err);
-    } else {
-      http.get(req.param('url'), function(response, err) {
-        if (err) {
-          res.send('shit2! ' + err);
-        } else {
-          response.pipe(file);
-          res.send('success');
-        }
+  new Fetcher(req.param('url')).fetch().then(function (data) {
+    new Memowizer(req.param('name'))
+      .save(data)
+      .then(function () {
+        res.send('success');
+      }, function (err) {
+        res.send('fail... ' + err);
       });
-    }
+  }, function (err) {
+      res.send('fail... ' + err);
   });
 });
 
 app.listen(config.server.port);
-console.log(config.name + ' is listening on port ' + config.server.port);
+  console.log(config.name + ' is listening on port ' + config.server.port);
